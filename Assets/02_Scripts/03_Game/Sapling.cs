@@ -5,6 +5,7 @@ using UnityEngine;
 public class Sapling : MonoBehaviour
 {
     [SerializeField] GameObject ferPrefab;
+    [SerializeField] GameObject canvas;
 
     GameObject myTask;
     GameObject parent;
@@ -13,6 +14,7 @@ public class Sapling : MonoBehaviour
     public bool isSetMyTask;
     public bool isDie;
     int time;
+    public int mySetNum;
 
     /// <summary>
     /// ƒ^ƒXƒN‚ÌŽí—Þ
@@ -90,9 +92,9 @@ public class Sapling : MonoBehaviour
         }
     }
 
-    public void SetTask(GameObject prefab,Vector3 pos,int num)
+    public void SetTask(GameObject prefab, int num)
     {
-        if(num == 0)
+        if (num == 0)
         {
             id = TASK_ID.Fertilizer;
         }
@@ -101,7 +103,31 @@ public class Sapling : MonoBehaviour
             id = TASK_ID.Water;
         }
 
-        myTask = Instantiate(prefab, pos, Quaternion.identity,this.transform);
+        Vector3 pos = canvas.transform.localPosition;
+
+        switch (mySetNum)
+        {
+            case 0:
+                myTask = Instantiate(prefab, new Vector3(pos.x - 626, pos.y + 364, 0f), Quaternion.identity, canvas.transform);
+                break;
+            case 1:
+                myTask = Instantiate(prefab, new Vector3(pos.x - 85, pos.y + 364, 0f), Quaternion.identity, canvas.transform);
+                break;
+            case 2:
+                myTask = Instantiate(prefab, new Vector3(pos.x + 456, pos.y + 364, 0f), Quaternion.identity, canvas.transform);
+                break;
+            case 3:
+                myTask = Instantiate(prefab, new Vector3(pos.x - 626, pos.y - 348, 0f), Quaternion.identity, canvas.transform);
+                break;
+            case 4:
+                myTask = Instantiate(prefab, new Vector3(pos.x - 85, pos.y - 348, 0f), Quaternion.identity, canvas.transform);
+                break;
+            case 5:
+                myTask = Instantiate(prefab, new Vector3(pos.x + 456, pos.y - 348, 0f), Quaternion.identity, canvas.transform);
+                break;
+        }
+
+
         isSetMyTask = true;
     }
 
