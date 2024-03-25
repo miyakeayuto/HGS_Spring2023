@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 
     public GameObject getItem;
 
-    GameObject clickedGameObject;//クリックされたゲームオブジェクトを代入する変数
+    public GameObject clickedGameObject;//クリックされたゲームオブジェクトを代入する変数
 
     public enum PLAYER_MODE
     {

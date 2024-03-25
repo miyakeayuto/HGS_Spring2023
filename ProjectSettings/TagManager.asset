@@ -6,16 +6,14 @@ TagManager:
   tags:
   - Sapling
   - Item
-  - Fertilizer
-  - Water
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Sapling
   - 
   - 
   - 

@@ -5,11 +5,13 @@ using UnityEngine;
 public class SaplingManager : MonoBehaviour
 {
     [SerializeField] List<GameObject> saplingList;
+    [SerializeField] public List<GameObject> saplingPrefabList;
     [SerializeField] public List<GameObject> taskPrefabList;
 
     private void Start()
     {
-        InvokeRepeating("SetTask", 5,10);
+        InvokeRepeating("SetTask", 0,3);
+        InvokeRepeating("SetTask", 0,8);
     }
 
     private void SetTask()
@@ -20,7 +22,8 @@ public class SaplingManager : MonoBehaviour
         {
             int rnd1 = Random.Range(0, saplingList.Count);
 
-            if (saplingList[rnd1].GetComponent<Sapling>().isSetMyTask == false)
+            if (saplingList[rnd1].GetComponent<Sapling>().isSetMyTask == false 
+                && saplingList[rnd1].GetComponent<Sapling>().isDie == false)
             {
                 saplingList[rnd1].GetComponent<Sapling>().isSetMyTask = true;
 
