@@ -158,7 +158,7 @@ public class Sapling : MonoBehaviour
                 Invoke("DieSapling", 3f);
 
                 // ÉXÉRÉAâ¡éZÇ∑ÇÈ
-
+                GameManager.Instance.score++;
             }
         }
         else if (stateNum != STATE_ID.Planter)

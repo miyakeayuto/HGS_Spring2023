@@ -5,17 +5,15 @@ using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
-    Rigidbody2D rigidbody2;
+    public GameObject getItem;
+    public GameObject clickedGameObject;//クリックされたゲームオブジェクトを代入する変数
 
     Vector2 targetPos;
-
+    Vector3 startPos;
     float speed = 9f;
-
     public bool isGetItem;
-
-    public GameObject getItem;
-
-    public GameObject clickedGameObject;//クリックされたゲームオブジェクトを代入する変数
+    public bool isMoveEnd;
+    int time;
 
     public enum PLAYER_MODE
     {
@@ -30,14 +28,20 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody2 = GetComponent<Rigidbody2D>();
         isGetItem = false;
         mode = PLAYER_MODE.REST;
         targetPos = new Vector2();
+        isMoveEnd = false;
+        time = 1;
+        startPos = this.transform.position;
     }
 
     private void Update()
     {
+        if (GameManager.Instance.isGameStart == false)
+        {
+            return;
+        }
 
         if (Input.GetMouseButtonDown(0) && mode != PLAYER_MODE.BUSY)
         {
@@ -62,12 +66,16 @@ public class Player : MonoBehaviour
                     {
                         targetPos = new Vector2(targetPos.x, targetPos.y + 1.5f);
                     }
+
+                    isMoveEnd = false;
                 }
                 else if(clickedGameObject.transform.tag == "Item")
                 {
                     targetPos = clickedGameObject.transform.position;
 
                     targetPos = new Vector2(targetPos.x - 1.5f, targetPos.y);
+
+                    isMoveEnd = false;
                 }
             }
         }
@@ -80,16 +88,32 @@ public class Player : MonoBehaviour
             return;
         }
 
-        this.transform.position = Vector2.MoveTowards(this.transform.position, targetPos, speed * Time.deltaTime);
-
-        if(clickedGameObject.tag == "Item")
+        if(isMoveEnd)
         {
-            float dis = Vector3.Distance(targetPos, this.transform.position);
+            // %50で1秒間隔
+            if (time % 100 == 0)
+            {
+                // スタート地点に戻る
+                targetPos = startPos;
+                isMoveEnd = false;
+                time = 1;
+            }
 
-            if (dis <= 0.2f)
-            {// 目的地にたどり着いた
+            time++; // カウントアップ
+        }
+        else
+        {
+            time = 1;
+        }
 
-                if(getItem != null)
+        float dis = Vector3.Distance(targetPos, this.transform.position);
+
+        if (dis <= 0.1f)
+        {// 目的地にたどり着いた
+
+            if (clickedGameObject.tag == "Item")
+            {
+                if (getItem != null)
                 {
                     getItem.GetComponent<Item>().isPlayer = false;
                 }
@@ -97,7 +121,16 @@ public class Player : MonoBehaviour
                 isGetItem = true;
                 clickedGameObject.GetComponent<Item>().isPlayer = true;
                 getItem = clickedGameObject;
+
             }
+
+            this.transform.position = targetPos;
+
+            isMoveEnd = true;
+        }
+        else
+        {
+            this.transform.position = Vector2.MoveTowards(this.transform.position, targetPos, speed * Time.deltaTime);
         }
     }
 }
