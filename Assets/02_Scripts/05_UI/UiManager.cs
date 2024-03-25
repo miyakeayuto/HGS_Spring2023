@@ -16,22 +16,36 @@ public class UiManager : MonoBehaviour
     [SerializeField] int timerMinutes;              //タイマー（分）
     [SerializeField] bool isEnd;                    //カウントダウンが終わったかどうか
     [SerializeField] GameObject gameEndText;        //ゲーム終了テキスト
+    [SerializeField] GameObject startTimerTextObj;  //ゲーム終了テキストのオブジェクト
     [SerializeField] Text startTimerText;           //ゲーム開始カウントダウンテキスト
-    [SerializeField] float startTimer;                //ゲーム開始カウントダウン
+    [SerializeField] float startTimer;              //ゲーム開始カウントダウン
+    [SerializeField] int tutorialTimer;             //チュートリアルタイマー
+    [SerializeField] GameObject tutorialImg;        //チュートリアルの画像
+    [SerializeField] AudioClip countDownSE;         //カウントダウンSE
+    [SerializeField] AudioClip endSE;               //ゲーム終了SE
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] bool isPlay;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        //チュートリアルの画像を非表示
+        timerTextObj.SetActive(false);
+        //１秒ごとに関数を呼ぶ
+        InvokeRepeating("Tutorial", 1.0f, 1.0f);
         //ゲーム終了テキストを非表示
         gameEndText.SetActive(false);
         //タイマーを非表示
         timerTextObj.SetActive(false);
+        //カウントダウンタイマーの非表示
+        startTimerTextObj.SetActive(false);
         //タイマー（分）の設定
         timerMinutes = 2;
         //タイマー（秒）を　分*60　で設定
         timerSeconds = timerMinutes * 60;
         //１秒ごとに関数を呼ぶ
-        InvokeRepeating("CountDown", 1.0f, 1.0f);
+        InvokeRepeating("CountDown", 2.0f, 1.0f);
     }
 
     // Update is called once per frame
@@ -41,23 +55,28 @@ public class UiManager : MonoBehaviour
         //{
         //    Initiate.Fade("SampleScene", Color.black, 1.0f);
         //}
-
-        if (isEnd)
+        if (tutorialTimer == 0)
         {
-            timerTextObj.SetActive(true);
-            //カウントダウン
-            timerSeconds -= Time.deltaTime;
-            //インスタンスを生成
-            var span = new TimeSpan(0, 0, (int)timerSeconds);
-            //フォーマットする
-            timerText.text = span.ToString(@"m\:ss");
-
-            if (timerSeconds < 0)
+            if (isEnd)
             {
-                timerSeconds = 0;
+                timerTextObj.SetActive(true);
+                //カウントダウン
+                timerSeconds -= Time.deltaTime;
+                //インスタンスを生成
+                var span = new TimeSpan(0, 0, (int)timerSeconds);
+                //フォーマットする
+                timerText.text = span.ToString(@"m\:ss");
 
-                //ゲーム終了テキストを表示
-                gameEndText.SetActive(true);
+                if (timerSeconds < 0)
+                {
+                    timerSeconds = 0;
+
+                    //再生
+                    audioSource.PlayOneShot(endSE);
+
+                    //ゲーム終了テキストを表示
+                    gameEndText.SetActive(true);
+                }
             }
         }
     }
@@ -65,14 +84,37 @@ public class UiManager : MonoBehaviour
     //カウントダウン処理
     void CountDown()
     {
-        --startTimer;
-        startTimerText.text = startTimer.ToString();
-        if (startTimer < 0)
+        if (tutorialTimer == 0)
         {
-            startTimer = 0;
-            isEnd = true;
-            Destroy(startTimerText);
-            CancelInvoke();
+            startTimerTextObj.SetActive(true);
+            --startTimer;
+            startTimerText.text = startTimer.ToString();
+            if (!isPlay)
+            {
+                //再生
+                audioSource.PlayOneShot(countDownSE);
+                isPlay = true;
+            }
+            if (startTimer < 0)
+            {
+                startTimer = 0;
+                isEnd = true;
+                startTimerTextObj.SetActive(false);
+                CancelInvoke();
+            }
+        }
+    }
+
+    void Tutorial()
+    {
+        tutorialImg.SetActive(true);
+
+        --tutorialTimer;
+        if (tutorialTimer < 0)
+        {
+            tutorialTimer = 0;
+            tutorialImg.SetActive(false);
+            CancelInvoke("Tutorial");
         }
     }
 }
