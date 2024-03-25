@@ -11,10 +11,14 @@ using UnityEngine.UI;
 public class GoGame : MonoBehaviour
 {
     [SerializeField] Text startText;        //テキスト
+    [SerializeField] AudioClip selectSE;    //選択SE
+    [SerializeField] AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         //フォントサイズを64、色を黒に
         startText.color = Color.black;
         startText.fontSize = 64;
@@ -38,6 +42,7 @@ public class GoGame : MonoBehaviour
 
     public void GoGameScene()
     {
+        audioSource.PlayOneShot(selectSE);
         Initiate.Fade("02_Game", Color.black, 1.0f);
     }
 }
