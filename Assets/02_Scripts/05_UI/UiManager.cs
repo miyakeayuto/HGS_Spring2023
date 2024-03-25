@@ -29,11 +29,6 @@ public class UiManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Mouse0))
-        //{
-        //    Initiate.Fade("SampleScene", Color.black, 1.0f);
-        //}
-
         //カウントダウン
         timerSeconds -= Time.deltaTime;
         //インスタンスを生成

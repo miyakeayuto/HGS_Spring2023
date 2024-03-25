@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ResultManager : MonoBehaviour
 {
+    [SerializeField] GameObject score;
+    [SerializeField] GameObject highScore;
+
     // Start is called before the first frame update
     void Start()
     {

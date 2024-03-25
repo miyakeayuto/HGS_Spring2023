@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // シングルトン用
+    public static GameManager Instance;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        //if(Input.GetKeyDown(KeyCode.Mouse0))
-        //{
-        //    Initiate.Fade("SampleScene", Color.black, 1.0f);
-        //}
+        if (Instance == null)
+        {
+            Instance = this;
+
+            // シーン遷移しても破棄しないようにする
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
