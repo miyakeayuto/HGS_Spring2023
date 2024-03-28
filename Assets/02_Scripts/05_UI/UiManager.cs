@@ -19,12 +19,13 @@ public class UiManager : MonoBehaviour
     [SerializeField] GameObject startTimerTextObj;  //ゲーム終了テキストのオブジェクト
     [SerializeField] Text startTimerText;           //ゲーム開始カウントダウンテキスト
     [SerializeField] float startTimer;              //ゲーム開始カウントダウン
-    [SerializeField] int tutorialTimer;             //チュートリアルタイマー
+    [SerializeField] bool isClicked;                //クリックしたか
     [SerializeField] GameObject tutorialImg;        //チュートリアルの画像
     [SerializeField] AudioClip countDownSE;         //カウントダウンSE
     [SerializeField] AudioClip endSE;               //ゲーム終了SE
     [SerializeField] AudioSource audioSource;
     [SerializeField] bool isPlay;
+    [SerializeField] GameObject startText;          //テキスト
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +56,12 @@ public class UiManager : MonoBehaviour
         //{
         //    Initiate.Fade("SampleScene", Color.black, 1.0f);
         //}
-        if (tutorialTimer == 0)
+        if (Input.GetMouseButtonDown(0))
+        {
+            isClicked = true;
+        }
+
+        if (isClicked)
         {
             if (isEnd)
             {
@@ -84,7 +90,7 @@ public class UiManager : MonoBehaviour
     //カウントダウン処理
     void CountDown()
     {
-        if (tutorialTimer == 0)
+        if (isClicked)
         {
             startTimerTextObj.SetActive(true);
             --startTimer;
@@ -108,13 +114,10 @@ public class UiManager : MonoBehaviour
     void Tutorial()
     {
         tutorialImg.SetActive(true);
-
-        --tutorialTimer;
-        if (tutorialTimer < 0)
+        if (isClicked)
         {
-            tutorialTimer = 0;
             tutorialImg.SetActive(false);
-            CancelInvoke("Tutorial");
+            startText.SetActive(false);
         }
     }
 }

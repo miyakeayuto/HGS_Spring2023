@@ -7,6 +7,8 @@ public class SaplingManager : MonoBehaviour
     [SerializeField] List<GameObject> saplingList;
     [SerializeField] public List<GameObject> saplingPrefabList;
     [SerializeField] public List<GameObject> taskPrefabList;
+    [SerializeField] AudioClip speedUpSE;       //スピードアップSE
+    [SerializeField] AudioSource audioSource;
     bool isCancel;
     bool isUpdate;
 
@@ -22,6 +24,9 @@ public class SaplingManager : MonoBehaviour
     {
         if (GameManager.Instance.isSpeedUP && isUpdate == false)
         {
+            //再生
+            audioSource.PlayOneShot(speedUpSE);
+
             isUpdate = true;
 
             InvokeRepeating("SetTask", 2, 2);
