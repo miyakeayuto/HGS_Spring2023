@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 
     Vector2 targetPos;
     Vector3 startPos;
-    float speed = 9f;
+    public float speed = 9f;
     public bool isGetItem;
     public bool isMoveEnd;
     int time;
@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
                     isMoveEnd = false;
                 }
                 else if(clickedGameObject.transform.tag == "Item")
-                {
+                {// アイテムの場合
                     targetPos = clickedGameObject.transform.position;
 
                     targetPos = new Vector2(targetPos.x - 1.5f, targetPos.y);
@@ -83,7 +83,8 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (targetPos == Vector2.zero || MiniGameManager.Instance.isMiniGameStart)
+        if (targetPos == Vector2.zero || MiniGameManager.Instance.isMiniGameStart 
+            || GameManager.Instance.isGameStart == false || GameManager.Instance.isGameEnd == true)
         {
             return;
         }
@@ -91,7 +92,7 @@ public class Player : MonoBehaviour
         if(isMoveEnd)
         {
             // %50で1秒間隔
-            if (time % 100 == 0)
+            if (time % 50 == 0)
             {
                 // スタート地点に戻る
                 targetPos = startPos;
@@ -108,21 +109,8 @@ public class Player : MonoBehaviour
 
         float dis = Vector3.Distance(targetPos, this.transform.position);
 
-        if (dis <= 0.1f)
+        if (dis <= 0f)
         {// 目的地にたどり着いた
-
-            if (clickedGameObject.tag == "Item")
-            {
-                if (getItem != null)
-                {
-                    getItem.GetComponent<Item>().isPlayer = false;
-                }
-
-                isGetItem = true;
-                clickedGameObject.GetComponent<Item>().isPlayer = true;
-                getItem = clickedGameObject;
-
-            }
 
             this.transform.position = targetPos;
 
@@ -131,6 +119,26 @@ public class Player : MonoBehaviour
         else
         {
             this.transform.position = Vector2.MoveTowards(this.transform.position, targetPos, speed * Time.deltaTime);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(clickedGameObject == null || collision.tag != "Item")
+        {
+            return;
+        }
+
+        if (clickedGameObject.tag == "Item" && collision.tag == "Item")
+        {
+            if (getItem != null)
+            {
+                getItem.GetComponent<Item>().isPlayer = false;
+            }
+
+            isGetItem = true;
+            clickedGameObject.GetComponent<Item>().isPlayer = true;
+            getItem = clickedGameObject;
         }
     }
 }

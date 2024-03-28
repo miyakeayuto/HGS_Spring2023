@@ -7,6 +7,8 @@ public class Item : MonoBehaviour
     public bool isPlayer;
     Vector3 startPos;
     [SerializeField] GameObject player;
+    [SerializeField] BoxCollider2D collider;
+
     public enum ITEM_NAME
     {
         Fertilizer,  // ”ì—¿
@@ -29,10 +31,12 @@ public class Item : MonoBehaviour
         if(isPlayer)
         {
             this.transform.position = new Vector3(player.transform.position.x,player.transform.position.y + 1f);
+            collider.enabled = false;
         }
         else
         {
             this.transform.position = startPos;
+            collider.enabled = true;
         }
     }
 }

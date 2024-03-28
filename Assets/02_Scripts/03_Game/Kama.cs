@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Kama : MonoBehaviour
 {
+    [SerializeField] GameObject minigameManager;
+
     // 位置座標
     private Vector3 position;
     // スクリーン座標をワールド座標に変換した位置座標
@@ -27,6 +29,7 @@ public class Kama : MonoBehaviour
     {
         if (collision.gameObject.layer == 7)
         {
+            minigameManager.GetComponent<MiniGameManager>().PlaySE();
             Destroy(collision.transform.gameObject);
             MiniGameManager.Instance.SubCounter();
         }

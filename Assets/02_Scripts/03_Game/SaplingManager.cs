@@ -7,31 +7,19 @@ public class SaplingManager : MonoBehaviour
     [SerializeField] List<GameObject> saplingList;
     [SerializeField] public List<GameObject> saplingPrefabList;
     [SerializeField] public List<GameObject> taskPrefabList;
-    [SerializeField] AudioClip speedUpSE;       //スピードアップSE
+    [SerializeField] AudioClip successSE;       //タスクが成功したSE
     [SerializeField] AudioSource audioSource;
     bool isCancel;
-    bool isUpdate;
 
     private void Start()
     {
-        InvokeRepeating("SetTask", 4,4);
-        InvokeRepeating("SetTask", 4,9);
+        InvokeRepeating("SetTask", 5,4.5f);
+        InvokeRepeating("SetTask", 5,8f);
         isCancel = false;
-        isUpdate = false;
     }
 
     private void Update()
     {
-        if (GameManager.Instance.isSpeedUP && isUpdate == false)
-        {
-            //再生
-            audioSource.PlayOneShot(speedUpSE);
-
-            isUpdate = true;
-
-            InvokeRepeating("SetTask", 2, 2);
-        }
-
         if(isCancel)
         {
             return;
@@ -92,5 +80,10 @@ public class SaplingManager : MonoBehaviour
 
             cnt++;
         }
+    }
+
+    public void PlaySE()
+    {
+        audioSource.PlayOneShot(successSE);
     }
 }

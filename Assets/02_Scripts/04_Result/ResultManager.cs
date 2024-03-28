@@ -13,6 +13,11 @@ public class ResultManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(GameManager.Instance.score > GameManager.Instance.highScore)
+        {// ハイスコア更新
+            GameManager.Instance.highScore = GameManager.Instance.score;
+        }
+
         score.text = GameManager.Instance.score.ToString();
         highScore.text = GameManager.Instance.highScore.ToString();
 

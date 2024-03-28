@@ -6,9 +6,12 @@ public class MiniGameManager : MonoBehaviour
 {
     [SerializeField] GameObject parent;
     [SerializeField] GameObject kusaPrefab;
+    [SerializeField] GameObject saplingParent;
+    [SerializeField] AudioClip kusaSE;
+    [SerializeField] AudioSource audioSource;
     GameObject saplingObj;
     public bool isMiniGameStart;
-    int num;
+    public int num;
 
     // シングルトン用
     public static MiniGameManager Instance;
@@ -32,9 +35,11 @@ public class MiniGameManager : MonoBehaviour
 
     public void SetMiniGame(GameObject target)
     {
+        saplingParent.SetActive(false);
+
         saplingObj = target;
         isMiniGameStart = true;
-        num = Random.Range(4, 8);
+        num = Random.Range(6, 12);
 
         for (int i = 0; i < num; i++)
         {
@@ -52,6 +57,8 @@ public class MiniGameManager : MonoBehaviour
 
         if (num <= 0)
         {// ミニゲームが終了
+            isMiniGameStart = false;
+            saplingParent.SetActive(true);
             saplingObj.GetComponent<Sapling>().ChangeState(true);
             parent.SetActive(false);
             saplingObj = null;
@@ -66,5 +73,10 @@ public class MiniGameManager : MonoBehaviour
         {
             saplingObj.GetComponent<Sapling>().ChangeState(false);
         }
+    }
+
+    public void PlaySE()
+    {
+        audioSource.PlayOneShot(kusaSE);
     }
 }

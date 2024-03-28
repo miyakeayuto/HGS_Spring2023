@@ -92,7 +92,7 @@ public class Sapling : MonoBehaviour
             }
             else if (id == TASK_ID.Kusa)
             {// タスク：草刈り
-                MiniGameManager.Instance.SetMiniGame(this.gameObject);
+                MiniGameManager.Instance.SetMiniGame(this.transform.gameObject);
                 DieTask();
             }
         }
@@ -175,6 +175,9 @@ public class Sapling : MonoBehaviour
                 // スコア加算する
                 GameManager.Instance.score++;
             }
+
+            // SE
+            parent.GetComponent<SaplingManager>().PlaySE();
         }
         else if (stateNum != STATE_ID.Planter)
         {

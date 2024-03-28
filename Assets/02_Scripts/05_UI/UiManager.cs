@@ -22,10 +22,16 @@ public class UiManager : MonoBehaviour
     [SerializeField] bool isClicked;                //クリックしたか
     [SerializeField] GameObject tutorialImg;        //チュートリアルの画像
     [SerializeField] AudioClip countDownSE;         //カウントダウンSE
+    [SerializeField] AudioClip speedSE;             //スピードUPのSE
     [SerializeField] AudioClip endSE;               //ゲーム終了SE
     [SerializeField] AudioSource audioSource;
     [SerializeField] bool isPlay;
     [SerializeField] GameObject startText;          //テキスト
+    [SerializeField] GameObject speedUpText1;
+    [SerializeField] GameObject speedUpText2;
+    GameObject sceneLoader;
+    bool isSpeedUp1;
+    bool isSpeedUp2;
 
     // Start is called before the first frame update
     void Start()
@@ -42,23 +48,24 @@ public class UiManager : MonoBehaviour
         //カウントダウンタイマーの非表示
         startTimerTextObj.SetActive(false);
         //タイマー（分）の設定
-        timerMinutes = 2;
+        timerMinutes = 1;
         //タイマー（秒）を　分*60　で設定
         timerSeconds = timerMinutes * 60;
         //１秒ごとに関数を呼ぶ
         InvokeRepeating("CountDown", 2.0f, 1.0f);
+
+        sceneLoader = GameObject.Find("SceneLoader");
+        isSpeedUp1 = false;
+        isSpeedUp2 = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Mouse0))
-        //{
-        //    Initiate.Fade("SampleScene", Color.black, 1.0f);
-        //}
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isClicked == false)
         {
             isClicked = true;
+            GameManager.Instance.isGameStart = true;
         }
 
         if (isClicked)
@@ -73,7 +80,7 @@ public class UiManager : MonoBehaviour
                 //フォーマットする
                 timerText.text = span.ToString(@"m\:ss");
 
-                if (timerSeconds < 0)
+                if (timerSeconds < 0 && GameManager.Instance.isGameEnd == false)
                 {
                     timerSeconds = 0;
 
@@ -82,6 +89,29 @@ public class UiManager : MonoBehaviour
 
                     //ゲーム終了テキストを表示
                     gameEndText.SetActive(true);
+
+                    GameObject saplingParent = GameObject.Find("SaplingList");
+                    saplingParent.SetActive(false);
+
+                    sceneLoader.GetComponent<SceneLoader>().LoadResult();
+;
+                    GameManager.Instance.isGameEnd = true;
+                    GameManager.Instance.isGameStart = false;
+                }
+
+                if (timerSeconds <= 40 && isSpeedUp1 == false)
+                {// 残り時間が40秒 && 非アクティブの場合
+                    speedUpText1.SetActive(true);
+                    isSpeedUp1 = true;
+                    //再生
+                    audioSource.PlayOneShot(speedSE);
+                }
+                else if (timerSeconds <= 15 && isSpeedUp2 == false)
+                {// 残り時間が15秒 && 非アクティブの場合
+                    speedUpText2.SetActive(true);
+                    isSpeedUp2 = true;
+                    //再生
+                    audioSource.PlayOneShot(speedSE);
                 }
             }
         }
