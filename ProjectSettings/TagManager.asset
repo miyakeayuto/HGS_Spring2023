@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Sapling
   - Item
+  - Kusa
   layers:
   - Default
   - TransparentFX
@@ -14,8 +15,8 @@ TagManager:
   - Water
   - UI
   - Sapling
-  - 
-  - 
+  - Kusa
+  - Kama
   - 
   - 
   - 

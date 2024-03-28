@@ -23,6 +23,7 @@ public class Sapling : MonoBehaviour
     {
         Fertilizer, // 肥料
         Water,      // 水
+        Kusa,       // 草刈り
     }
 
     public TASK_ID id;
@@ -89,6 +90,11 @@ public class Sapling : MonoBehaviour
                 Instantiate(ferPrefab, new Vector3(transform.localPosition.x + 0.7f, transform.localPosition.y + 0.5f, -2f),
                     Quaternion.Euler(0f,0f,130f));
             }
+            else if (id == TASK_ID.Kusa)
+            {// タスク：草刈り
+                MiniGameManager.Instance.SetMiniGame(this.gameObject);
+                DieTask();
+            }
         }
     }
 
@@ -98,9 +104,13 @@ public class Sapling : MonoBehaviour
         {
             id = TASK_ID.Fertilizer;
         }
-        else
+        else if(num == 1)
         {
             id = TASK_ID.Water;
+        }
+        else if(num == 2)
+        {
+            id = TASK_ID.Kusa;
         }
 
         Vector3 pos = canvas.transform.localPosition;
@@ -139,6 +149,11 @@ public class Sapling : MonoBehaviour
 
     public void ChangeState(bool isSuccess)
     {
+        if(MiniGameManager.Instance.isMiniGameStart == true)
+        {
+            return;
+        }
+
         if(saplingObj != null)
         {// 現在表示している木を破棄する
             Destroy(saplingObj);

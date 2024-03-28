@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.isGameStart == false)
+        if (GameManager.Instance.isGameStart == false || MiniGameManager.Instance.isMiniGameStart == true)
         {
             return;
         }
@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (targetPos == Vector2.zero)
+        if (targetPos == Vector2.zero || MiniGameManager.Instance.isMiniGameStart)
         {
             return;
         }

@@ -21,6 +21,11 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(MiniGameManager.Instance.isMiniGameStart)
+        {
+            return;
+        }
+
         //カウントアップ
         limitTime += Time.deltaTime / 10;
         //limitTimeに伴って画像を塗りつぶす

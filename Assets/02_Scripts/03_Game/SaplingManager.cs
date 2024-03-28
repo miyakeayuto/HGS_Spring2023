@@ -41,7 +41,7 @@ public class SaplingManager : MonoBehaviour
 
     private void SetTask()
     {
-        if(GameManager.Instance.isGameEnd || GameManager.Instance.isGameStart == false)
+        if (GameManager.Instance.isGameEnd || GameManager.Instance.isGameStart == false || MiniGameManager.Instance.isMiniGameStart == true)
         {
             return;
         }
@@ -50,6 +50,11 @@ public class SaplingManager : MonoBehaviour
 
         while (cnt < 6)
         {
+            if (MiniGameManager.Instance.isMiniGameStart == true)
+            {
+                return;
+            }
+
             int rnd1 = Random.Range(0, saplingList.Count);
 
             if (saplingList[rnd1].GetComponent<Sapling>().isSetMyTask == false 
@@ -58,7 +63,21 @@ public class SaplingManager : MonoBehaviour
                 saplingList[rnd1].GetComponent<Sapling>().isSetMyTask = true;
 
                 // タスクを設定
-                int rnd2 = Random.Range(0, taskPrefabList.Count);
+                int rnd2 = Random.Range(1, 101);
+
+                if(rnd2 <= 40)
+                {
+                    rnd2 = 0;
+                }
+                else if(rnd2 <= 80)
+                {
+                    rnd2 = 1;
+                }
+                else
+                {
+                    rnd2 = 2;
+                }
+
                 saplingList[rnd1].GetComponent<Sapling>().SetTask(taskPrefabList[rnd2],rnd2);
 
                 Debug.Log("タスクnum:" + rnd2);
